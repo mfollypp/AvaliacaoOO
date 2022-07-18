@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InvalidClassException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import Main.Excecoes.AvaliacaoOO2022NaoInformadaException;
 
 public class Mercado {
     private String nomeMercado;
@@ -30,18 +31,20 @@ public class Mercado {
     }
     
     //Folly
-    public void leArqFuncionarios() throws FileNotFoundException, IOException, ClassNotFoundException, InvalidClassException{
+    public void leArqFuncionarios() throws FileNotFoundException, IOException, ClassNotFoundException, InvalidClassException, AvaliacaoOO2022NaoInformadaException{
         try{
             fis = new FileInputStream("funcionarios.dat");
             ois = new ObjectInputStream(fis); //metodos pra abrir arquivo pra ler
             while(fis.available() != 0){ //enquanto nao é o fim do arquivo
                 Funcionario func = (Funcionario) ois.readObject(); //le objeto funcionario do arquivo
-                 if(!this.funcionarios.contains(func)){ //se nao contem o funcionario no array de funcionarioS
+                if(!this.funcionarios.contains(func)){ //se nao contem o funcionario no array de funcionarioS
                     this.funcionarios.add(func); //add o funcionario lido do arquivo ao array funcionarioS
                 }
             }
-        }catch(FileNotFoundException | InvalidClassException fnfex){ //trata as excessoes 
-            
+        }catch(FileNotFoundException fnfex){ //trata as excessoes 
+            fnfex.getMessage();
+        }catch(InvalidClassException icex){
+            icex.getMessage();
         }finally{
             if(fis != null){
                 fis.close(); //fecha file input
@@ -53,15 +56,22 @@ public class Mercado {
     }
     
     //Folly
-    public void escreveArqFuncionarios() throws FileNotFoundException, IOException{
+    public void escreveArqFuncionarios() throws FileNotFoundException, IOException, AvaliacaoOO2022NaoInformadaException{
         try{
             fos = new FileOutputStream("funcionarios.dat", false);
             oos = new ObjectOutputStream(fos); //metodos pra abrir o arquivo pra escrever
             for(Funcionario func : this.funcionarios){ //para cada funcionario no array funcionarioS
+                if(func.getAvaliacao() == null){
+                    throw new AvaliacaoOO2022NaoInformadaException();
+                }
                 oos.writeObject(func); //escreve no arquivo cada funcionario
             }
-        }catch(FileNotFoundException fex){ //trata as excessoes
-            
+        }catch(AvaliacaoOO2022NaoInformadaException aniex){
+            System.out.println(aniex.getMessage());
+        }catch(FileNotFoundException fnfex){ //trata as excessoes 
+            fnfex.getMessage();
+        }catch(InvalidClassException icex){
+            icex.getMessage();   
         }finally{
             if(fos != null){
                 fos.close(); //fecha file output
@@ -90,8 +100,8 @@ public class Mercado {
 //    }
     
     //Folly
-    public void getFuncionarios() {
-        System.out.println("\n\n------------------------------------------------------------------");
+    public void printaFuncionarios() {
+        System.out.println("------------------------------------------------------------------");
         System.out.println("                           FUNCIONARIOS                           ");
         System.out.println("------------------------------------------------------------------");
         System.out.printf("%-20s | %-20s | %-20s\n", "Nome", "Cadastro", "Tipo Funcionario");
@@ -99,6 +109,7 @@ public class Mercado {
         for(Funcionario func : this.funcionarios){ //para cada funcionario no array funcionarioS
             System.out.printf("%-20s | %-20s | %-20s\n", func.getNome(), func.getCadastro(), func.getTipoFuncionario());
         }
+        System.out.println("\n");
     }
     
     //Folly
@@ -150,4 +161,7 @@ public class Mercado {
         return this.estoque;
     }
     
+    public ArrayList<Funcionario> getFuncionarios(){
+        return this.funcionarios;
+    }
 }

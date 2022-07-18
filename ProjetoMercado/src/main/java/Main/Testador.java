@@ -1,12 +1,15 @@
 package Main;
 
+import Main.Excecoes.AvaliacaoOO2022NaoInformadaException;
 import java.io.Console;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InvalidClassException;
 import java.util.Calendar;
 import java.util.Scanner;
 
 public class Testador {
-    public static void main(String[] args) throws IOException, ClassNotFoundException {
+    public static void main(String[] args) throws IOException, ClassNotFoundException, FileNotFoundException, InvalidClassException, AvaliacaoOO2022NaoInformadaException {
         
         /*--------------------------------------------------------------------*/
         //Teste da escrita e leitura do arquivo de funcionarios:
@@ -16,107 +19,40 @@ public class Testador {
         mercado.addFuncionario("Matheus", 24, 1111, "Coordenador");
         mercado.addFuncionario("Folly", 23, 2222, "Gerente");
         mercado.addFuncionario("Pilotto", 25, 3333, "CEO");
-        mercado.escreveArqFuncionarios();
-        mercado.getFuncionarios();
+        mercado.escreveArqFuncionarios(); // vai triggar a AvaliacaoOO2022NaoInformadaException pela primeira vez
+        mercado.printaFuncionarios(); // vai printar a primeira tela dos funcionarios
+        funcionarioToString(mercado); // vai triggar a AvaliacaoOO2022NaoInformadaException pela segunda vez
         
         mercado.leArqFuncionarios();
         mercado.addFuncionario("Peixoto", 26, 4444, "CTO");
-        mercado.escreveArqFuncionarios();
-        mercado.getFuncionarios();
-        /*####################################################################*/
+        setaAvaliacao(mercado); // agora quando chamar a seguir o metodo de escrever em arquivo nao vai lançar a exceçao AvaliacaoOO2022
+        mercado.escreveArqFuncionarios(); // nao vai triggar a exception
+        mercado.printaFuncionarios(); // vai printar a segunda tela dos funcionarios
+        funcionarioToString(mercado); // nao vai triggar a exception
         
-        /*--------------------------------------------------------------------*/
-        //Simulacao cliente vai fazer compras no mercado:
-//        Cliente matheus = new Cliente("Matheus", 24, 1324, false);
-//        
-//        mercado.getPrateleira().printaProdutos();
-//        
-//        matheus.addProd("arroz", 2, mercado);
-//        matheus.addProd("feijao", 3, mercado);
-//        matheus.addProd("carne", 11, mercado);
-//        
-//        matheus.getCarrinho().printaProdutos();
-//        mercado.getPrateleira().printaProdutos();
-//        mercado.getEstoque().printaProdutos();
-//        
-//        Caixa.fazPagamento(matheus, "cartao");
-        /*####################################################################*/
-        
-        /*--------------------------------------------------------------------*/
-        //Simulacao de checagem para restoque de produtos que acabaram na prateleira
-//        mercado.restocaProdutos();
-//        
-//        matheus.getCarrinho().printaProdutos();
-//        mercado.getPrateleira().printaProdutos();
-//        mercado.getEstoque().printaProdutos();
-        /*####################################################################*/
-        
-        /*--------------------------------------------------------------------*/
-        //Testando o toString
-//        System.out.println("\n\n\n");
-//        System.out.println(matheus);
-//        Funcionario func = new Funcionario("Funcionario Teste", 32, 9999, "Caixa");
-//        Caixa.setFuncionario(func);
-//        System.out.println(Caixa.getFuncionario());
-        /*####################################################################*/
-        
-        /*--------------------------------------------------------------------*/
-        //Simulacao cliente vai fazer compras no mercado:
-            
-//        mercado.getPrateleira().printaProdutos();
-        Scanner input = new Scanner(System.in);
-            
-        //input do cliente
-        System.out.println("\n\nBem vindo ao " + mercado.getNomeMercado() + "!\n");
-
-        System.out.println("Qual seu nome?");
-        String nome = input.nextLine();
-        System.out.println("Qual a sua idade?");
-        int idade = input.nextInt();        
-        System.out.println("Qual a senha do seu cartao?");
-        int senha = input.nextInt();
-        
-        System.out.println("\n\n\n\n");
-
-        Cliente matheusin = new Cliente(nome, idade, senha, false);
-        
-        mercado.getPrateleira().printaProdutos();
-        
-        System.out.println("\n\nQuantos sacos de arroz voce deseja colocar no carrinho?");
-        int qtdArroz = input.nextInt();
-        matheusin.addProd("arroz", qtdArroz, mercado);
-        System.out.println("Quantos sacos de feijao voce deseja colocar no carrinho?");
-        int qtdFeijao = input.nextInt();
-        matheusin.addProd("feijao",qtdFeijao, mercado);
-        System.out.println("Quantas carnes voce deseja colocar no carrinho?");
-        int qtdCarne = input.nextInt();
-        matheusin.addProd("carne", qtdCarne, mercado);
-        System.out.println("Quantos sacos de batata voce deseja colocar no carrinho?");
-        int qtdBatata = input.nextInt();
-        matheusin.addProd("batata", qtdBatata, mercado);
-        System.out.println("Quantos sucos voce deseja colocar no carrinho?");
-        int qtdSuco = input.nextInt();
-        matheusin.addProd("suco", qtdSuco, mercado);
-        System.out.println("Quantos refrigerantes voce deseja colocar no carrinho?");
-        int qtdRefri = input.nextInt();
-        matheusin.addProd("refrigerante", qtdRefri, mercado);
-
-        matheusin.getCarrinho().printaProdutos();
-        mercado.getPrateleira().printaProdutos();
-        mercado.getEstoque().printaProdutos();
-        
-        System.out.println("\n\nVoce deseja pagar com cartao(1) ou dinheiro(2)?");
-        int controle = input.nextInt();
-        if(controle == 1){
-            Caixa.fazPagamento(matheusin, "cartao");
+    }
+    
+    public static void setaAvaliacao(Mercado mercado){
+        for(Funcionario func : mercado.getFuncionarios()){
+            AvaliacaoOO2022 aval = new AvaliacaoOO2022("AvaliacaoOO", 620031, 8.0);
+            func.setAvaliacao(aval);
         }
-        if(controle == 2){
-            Caixa.fazPagamento(matheusin, "dinheiro");
+    }
+    
+    public static void funcionarioToString(Mercado mercado) throws AvaliacaoOO2022NaoInformadaException{
+        try{
+            funcionarioToStringLancaExcecao(mercado);
+        }catch(AvaliacaoOO2022NaoInformadaException aniex){
+            System.out.println(aniex.getMessage());
         }
-        
-        mercado.restocaProdutos();      
-        matheusin.getCarrinho().printaProdutos();
-        mercado.getPrateleira().printaProdutos();
-        mercado.getEstoque().printaProdutos();
+    }
+    
+    public static void funcionarioToStringLancaExcecao(Mercado mercado) throws AvaliacaoOO2022NaoInformadaException {
+        for(Funcionario func : mercado.getFuncionarios()){
+            if(func.getAvaliacao() == null){
+                throw new AvaliacaoOO2022NaoInformadaException();
+            }
+            System.out.println(func);
+        }
     }
 }
