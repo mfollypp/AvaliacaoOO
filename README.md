@@ -8,7 +8,7 @@
 - [x] Ao salvar um objeto dessa classe, caso o atributo não tenha sido informado, lance a exceção AvaliacaoOO2022NaoInformadaException.
   - Ao escrever os objetos da classe Funcionario no arquivo, se o funcionario em questão não tiver o atributo avaliação informado, é lançada a exceção AvaliacaoOO2022NaoInformadaException.
 - [x] Essa exceção deverá ser tratada nas classes que interagem com o usuário em que deverão ser exibidas ao usuário mensagens correspondentes às exceções lançadas
-  - A exceção está sendo tratada na classe que interage com o usuário (Mercado) que foi implementada na classe Testador (main)
+  - A exceção está sendo tratada na classe que origina o lançamento das exceções (Mercado), que foi implementada na classe Testador (main), e também está sendo realisado o tratamento da exceção solicitada em métodos static na main (Testador).
 
 ### Classes Alteradas:
 - AvaliacaoOO2022 (implementada)
@@ -16,3 +16,11 @@
 - Funcionario
 - Mercado
 - Testador (main)
+
+### Observações:
+#### Achei um pouco vago alguns dos requisitos que deveriam ser cumpridos para completar a avaliação, então a lógica que segui foi:
+- Criar uma classe instanciável AvaliacaoOO2022 e uma classe para exceção AvaliacaoOO2022NaoInformadaException
+- Adicionar um atributo do tipo AvaliacaoOO2022 em uma classe importante/funcional que faz sentido a existência e/ou que tenha maior funcionalidade
+- Fazer com que esse atributo consiga também ser salvo em arquivo, de maneira que o objeto que possui aquele atributo seja adicionado ao arquivo e trate suas exceções para tal
+- Lançar a exceção criada caso esteja tentando adicionar ao arquivo um objeto cujo atributo AvaliacaoOO2022 seja nulo/não foi informado
+- Tratar as exceções na classe que há interação com o usuário direta ou indiretamente, lançando um print da mensagem da exceção para informar o usuário
