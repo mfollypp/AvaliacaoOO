@@ -21,7 +21,7 @@ public class Testador {
         mercado.addFuncionario("Pilotto", 25, 3333, "CEO");
         mercado.escreveArqFuncionarios(); // vai triggar a AvaliacaoOO2022NaoInformadaException pela primeira vez
         mercado.printaFuncionarios(); // vai printar a primeira tela dos funcionarios
-        funcionarioToString(mercado); // vai triggar a AvaliacaoOO2022NaoInformadaException pela segunda vez
+        funcionarioToString(mercado); // vai triggar a AvaliacaoOO2022NaoInformadaException pela segunda vez (3x porque vai ser 1 pra cada funcionario atualmente na lista)
         
         mercado.leArqFuncionarios();
         mercado.addFuncionario("Peixoto", 26, 4444, "CTO");
@@ -40,19 +40,15 @@ public class Testador {
     }
     
     public static void funcionarioToString(Mercado mercado) throws AvaliacaoOO2022NaoInformadaException{
-        try{
-            funcionarioToStringLancaExcecao(mercado);
-        }catch(AvaliacaoOO2022NaoInformadaException aniex){
-            System.out.println(aniex.getMessage());
-        }
-    }
-    
-    public static void funcionarioToStringLancaExcecao(Mercado mercado) throws AvaliacaoOO2022NaoInformadaException {
         for(Funcionario func : mercado.getFuncionarios()){
-            if(func.getAvaliacao() == null){
-                throw new AvaliacaoOO2022NaoInformadaException();
+            try{
+                if(func.getAvaliacao() == null){
+                    throw new AvaliacaoOO2022NaoInformadaException();
+                }
+                System.out.println(func);
+            }catch(AvaliacaoOO2022NaoInformadaException aniex){
+                System.out.println(aniex.getMessage());
             }
-            System.out.println(func);
         }
     }
 }

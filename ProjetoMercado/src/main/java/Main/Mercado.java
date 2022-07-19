@@ -61,13 +61,15 @@ public class Mercado {
             fos = new FileOutputStream("funcionarios.dat", false);
             oos = new ObjectOutputStream(fos); //metodos pra abrir o arquivo pra escrever
             for(Funcionario func : this.funcionarios){ //para cada funcionario no array funcionarioS
-                if(func.getAvaliacao() == null){
-                    throw new AvaliacaoOO2022NaoInformadaException();
+                try{
+                    if(func.getAvaliacao() == null){
+                        throw new AvaliacaoOO2022NaoInformadaException();
+                    }
+                }catch(AvaliacaoOO2022NaoInformadaException aniex){
+                    System.out.println(aniex.getMessage());
                 }
                 oos.writeObject(func); //escreve no arquivo cada funcionario
             }
-        }catch(AvaliacaoOO2022NaoInformadaException aniex){
-            System.out.println(aniex.getMessage());
         }catch(FileNotFoundException fnfex){ //trata as excessoes 
             fnfex.getMessage();
         }catch(InvalidClassException icex){
